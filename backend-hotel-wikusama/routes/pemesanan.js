@@ -39,6 +39,55 @@ app.get("/", (req, res) => {
     });
 });
 
+// get pemesanan berdasarkan email
+app.post("/email", (req, res) => {
+  const email = req.body.email; // retrieve the email from the request parameters
+  pemesanan
+    .findAll({
+      where: {
+        email_pemesan: {
+          [Op.like]: '%'+email+'%'
+        }, // filter based on the email
+      },
+    })
+    .then((pemesanan) => {
+      res.json({
+        count: pemesanan.length,
+        pemesanan: pemesanan,
+      });
+    })
+    .catch((error) => {
+      res.json({
+        message: error.message,
+      });
+    });
+});
+
+// get pemesanan berdasarkan TGL CHECK IN
+app.post("/checkin", (req, res) => {
+  const tgl_check_in = req.body.tgl_check_in; // retrieve the email from the request parameters
+  pemesanan
+    .findAll({
+      where: {
+        tgl_check_in: {
+          [Op.like]: tgl_check_in+'T00:00:00.000Z'
+        }, // filter based on the email
+      },
+    })
+    .then((pemesanan) => {
+      res.json({
+        count: pemesanan.length,
+        pemesanan: pemesanan,
+      });
+    })
+    .catch((error) => {
+      res.json({
+        message: error.message,
+      });
+    });
+});
+
+
 // function getDaysBetween(startDateString, endDateString) {
 //     const startDate = new Date(startDateString);
 //     const endDate = new Date(endDateString);
@@ -126,15 +175,29 @@ app.post("/", (req, res) => {
                     tgl_akses: dates[b],
                     harga: 10000
                   });
-                  await data.save();
+                  await data.save()
+                  
                 }
               } else {
                 console.log(`Invalid room index ${i}`);
               }
-            }       
+            }
+            const response = {
+              message: 'Booking successful',
+              booking: {
+                id_pemesanan: res_pemesanan.dataValues.id_pemesanan,
+                tipe_kamar: req.body.id_tipe_kamar,
+                jumlah_kamar: req.body.jumlah_kamar,
+                check_in: req.body.tgl_check_in,
+                check_out: req.body.tgl_check_out,
+                rooms: nomor.map(room => room.id_kamar)
+              }
+            };
+            
+            // Send JSON response with booking details
+            res.json(response);       
         });
-        
-        
+
     })
     .catch((error) => {
       res.json({
@@ -144,7 +207,7 @@ app.post("/", (req, res) => {
 });
 
 //endpoint untuk mengupdate data pemesanan, METHOD: PUT, fuction: UPDATE
-app.put("/:id", (req, res) => {
+app.put("/status/:id", (req, res) => {
   let param = {
     id_pemesanan: req.params.id,
   };

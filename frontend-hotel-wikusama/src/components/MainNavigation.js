@@ -39,6 +39,19 @@ function MainNavigation() {
                 Pemesanan
               </NavLink>
             </li>
+            {/* Daftar Kamar */}
+            <li> 
+              <NavLink
+                to="/daftar_kamar"
+                className={({ isActive }) =>
+                  isActive
+                    ? "font-semibold bg-gray-300 p-2 rounded-full transition-all duration-200 ease-linear"
+                    : "hover:bg-gray-100 p-2 rounded-full transition-all duration-200 ease-linear" 
+                }
+              >
+                Daftar Kamar
+              </NavLink>
+            </li>
             {/* About */}
             <li>
               <NavLink
@@ -95,6 +108,18 @@ function MainNavigation() {
                 }
               >
                 Detail
+              </NavLink>
+            </li>
+            <li> 
+            <NavLink
+                to="/resp/editStatus"
+                className={({ isActive }) =>
+                  isActive
+                    ? "font-semibold bg-gray-300 p-2 rounded-full transition-all duration-200 ease-linear"
+                    : "hover:bg-gray-100 p-2 rounded-full transition-all duration-200 ease-linear"
+                }
+              >
+                Edit Status
               </NavLink>
             </li>
             <li> 

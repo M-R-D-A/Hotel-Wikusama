@@ -2,12 +2,16 @@ import axios from "axios";
 import React, { Fragment, useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import Pemesanan from "./Pemesanan";
-
+import SliderHome from "./sliderHome";
+import DatePemesanan from "./DatePemesanan";
 const Home = () => {
 
   return (
     <Fragment>
-      <Pemesanan />
+      <SliderHome />
+      <div className="p-1">
+      <DatePemesanan />
+      </div>
       <div className="py-12 bg-hero-pattern bg-cover bg-blend-saturation rounded-xl m-5">
         <div className="container mx-auto px-6 content-center place-items-center">
           <h2 className="text-4xl font-bold mb-2 text-white outline-4 text-center">

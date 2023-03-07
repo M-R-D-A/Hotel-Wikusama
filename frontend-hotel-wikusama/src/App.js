@@ -3,21 +3,23 @@ import {
   createBrowserRouter, 
   RouterProvider } from 'react-router-dom'
 
-import About from './Pages/About';
-import Home from './Pages/Home';
-import Pemesanan from './Pages/Pemesanan';
+import Daftar from './Pages/admin/Daftar';
+import TipeKamar from './Pages/admin/TipeKamar';
+import ListUser from './Pages/admin/ListUser';
+import ListTipeKamar from './Pages/admin/ListTipeKamar';
+import ListKamar from './Pages/admin/ListKamar';
+import ListPemesanan from './Pages/resepsionis/ListPemesanan';
+import ListDetailPemesanan from './Pages/resepsionis/ListDetailPemesanan';
+import About from './Pages/kostumer/About';
+import Home from './Pages/kostumer/Home';
+import Pemesanan from './Pages/kostumer/Pemesanan';
 import RootLayout from './Pages/Root';
 import ErrorPage from './Pages/Error';
-import Daftar from './Pages/Daftar';
-import TipeKamar from './Pages/TipeKamar';
-import ListUser from './Pages/ListUser';
-import ListTipeKamar from './Pages/ListTipeKamar';
 import Login from './Pages/Login';
 import Riwayat from './Pages/Riwayat';
 import AuthContext from './context/auth-context';
-import ListPemesanan from './Pages/ListPemesanan';
-import ListDetailPemesanan from './Pages/ListDetailPemesanan';
-import ListKamar from './Pages/ListKamar';
+import DaftarKamar from './Pages/kostumer/DaftarKamar';
+import EditStatus from './Pages/resepsionis/EditStatus';
 
 const router = createBrowserRouter([
   {
@@ -28,10 +30,7 @@ const router = createBrowserRouter([
       { index: true, element: <Home /> },
       { path: '/about', element: <About />},
       { path: '/pemesanan', element: <Pemesanan />},
-      { path: '/daftar', element: <Daftar />},
-      { path: '/tipe_kamar', element: <TipeKamar />},
-      { path: '/list_user', element: <ListUser />},
-      { path: '/list/tipe_kamar', element: <ListTipeKamar />},
+      { path: '/daftar_kamar', element: <DaftarKamar />},
       { path: '/login', element: <Login />},
       { path: '/riwayat', element: <Riwayat />}
     ]
@@ -45,7 +44,8 @@ const routerResepsionis = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       { index: true, element: <ListPemesanan /> },
-      { path: '/resp/detail', element: <ListDetailPemesanan />}
+      { path: '/resp/detail', element: <ListDetailPemesanan />},
+      { path: '/resp/editStatus', element: <EditStatus />}
     ]
   }
 ])
