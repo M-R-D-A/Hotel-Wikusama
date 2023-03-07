@@ -13,37 +13,67 @@ function reducer(state, action) {
 }
 
 const Pemesanan = () => {
-  const [namaPemesan, setNamaPemesan] = useState();
-  const [emailPemesan, setEmailPemesan] = useState();
-  const [tglCheckIn, setTglCheckIn] = useState({data: ''});
-  const [tglCheckOut, setTglCheckOut] = useState({data: ''});
+  const [namaPemesan, setNamaPemesan] = useState("");
+  const [emailPemesan, setEmailPemesan] = useState("");
+  const [tglCheckIn, setTglCheckIn] = useState("");
+  const [tglCheckOut, setTglCheckOut] = useState("");
   const [namaTamu, setNamaTamu] = useState();
-  const [tipeKamar, setTipeKamar] = useState({data: 1});
-  // const [jumlahKamar, setJumlahKamar] = useState();
+  const [tipeKamar, setTipeKamar] = useState(1);
   const tanggalPemesanan = new Date();
   const [state, dispatch] = useReducer(reducer, { count: 0 });
   const [kamarKosong, setKamarKosong] = useState();
-  const [alert, setAlert] = useState('kosong');
+  const [alert, setAlert] = useState("kosong");
+  const [pergi, setPergi] = useState(false);
 
-  
-
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if(pergi){
+      const uniqueNumber = () => {
+        return new Date().getTime() + Math.random();
+      };
+      axios
+        .post("http://localhost:8080/store/pemesanan", {
+          nomor_pemesan: uniqueNumber(),
+          nama_pemesan: namaPemesan,
+          email_pemesan: emailPemesan,
+          tgl_pemesanan: tanggalPemesanan,
+          tgl_check_in: tglCheckIn,
+          tgl_check_out: tglCheckOut,
+          nama_tamu: namaTamu,
+          jumlah_kamar: state.count,
+          id_tipe_kamar: tipeKamar,
+        })
+        .then((res) => {
+          console.log("anjing");
+          setPergi(false);
+          setNamaPemesan("");
+        })
+        .catch((error) => {
+          setPergi(false);
+          console.log(error.message);
+        });
+    }
+  };
   useEffect(() => {
     const getKamarKosong = async () => {
-      if(tglCheckIn.data && tglCheckOut.data){
+      if (tglCheckIn && tglCheckOut) {
         try {
-          let response = await axios.post('http://localhost:8080/store/tipe_kamar/kosong', {
-            id: tipeKamar.data,
-            tgl_check_in: tglCheckIn.data,
-            tgl_check_out: tglCheckOut.data
-          });
-          console.log(tglCheckIn.data)
-          console.log(tglCheckOut.data)
+          let response = await axios.post(
+            "http://localhost:8080/store/tipe_kamar/kosong",
+            {
+              id: tipeKamar,
+              tgl_check_in: tglCheckIn,
+              tgl_check_out: tglCheckOut,
+            }
+          );
+          console.log(tglCheckIn);
+          console.log(tglCheckOut);
           console.log(response);
-          if(response.data.tipe_kamar.length === 0){
-            console.log('anjay');
+          if (response.data.tipe_kamar.length === 0) {
+            console.log("anjay");
             setKamarKosong(0);
           } else {
-            if(response.data.tipe_kamar[0].kamar.length > 0){
+            if (response.data.tipe_kamar[0].kamar.length > 0) {
               console.log(response.data.tipe_kamar);
               setKamarKosong(response.data.tipe_kamar[0].kamar.length);
             }
@@ -51,50 +81,23 @@ const Pemesanan = () => {
           //  else if(!response.data.tipe_kamar){
           //   console.log('anjay')
           //   setAlert('kamar penuh')
-          // }  
-        } catch(e) {
+          // }
+        } catch (e) {
           console.log(e.message);
         }
       }
-    }
+    };
 
-  getKamarKosong();
-  }, [tglCheckIn.data, tglCheckOut.data, tipeKamar.data])
+    getKamarKosong();
+  }, [tglCheckIn, tglCheckOut, tipeKamar]);
 
   useEffect(() => {
-    if(kamarKosong === 0 ){
-      setAlert('kamar penuh');
-    } else if (kamarKosong > 0){
-      setAlert(`Ada ${kamarKosong} kamar tersedia`)
+    if (kamarKosong === 0) {
+      setAlert("kamar penuh");
+    } else if (kamarKosong > 0) {
+      setAlert(`Ada ${kamarKosong} kamar tersedia`);
     }
-  }, [kamarKosong])
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const uniqueNumber = () => {
-      return new Date().getTime() + Math.random();
-    };
-    axios
-      .post("http://localhost:8080/store/pemesanan", {
-        nomor_pemesan: uniqueNumber(),
-        nama_pemesan: namaPemesan.data,
-        email_pemesan: emailPemesan.data,
-        tgl_pemesanan: tanggalPemesanan,
-        tgl_check_in: tglCheckIn.data,
-        tgl_check_out: tglCheckOut.data,
-        nama_tamu: namaTamu.data,
-        jumlah_kamar: state.count,
-        id_tipe_kamar: tipeKamar.data,
-      })
-      .then((res) => {
-        console.log(res);
-        setNamaPemesan("");
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
-  };
+  }, [kamarKosong]);
 
   var column = "flex flex-wrap -mx-3 mb-3";
   return (
@@ -114,7 +117,7 @@ const Pemesanan = () => {
                 id="grid-first-name"
                 type="text"
                 placeholder="Nama Pemesan"
-                onChange={(ev) => setNamaPemesan({ data: ev.target.value })}
+                onChange={(ev) => setNamaPemesan(ev.target.value)}
               />
             </div>
             {/* Email*/}
@@ -128,7 +131,7 @@ const Pemesanan = () => {
                 id="grid-first-name"
                 type="text"
                 placeholder="Email Pemesan"
-                onChange={(ev) => setEmailPemesan({ data: ev.target.value })}
+                onChange={(ev) => setEmailPemesan(ev.target.value)}
               />
             </div>
             {/* Nama Tamu */}
@@ -142,7 +145,7 @@ const Pemesanan = () => {
                 id="grid-first-name"
                 type="text"
                 placeholder="Nama Tamu"
-                onChange={(ev) => setNamaTamu({ data: ev.target.value })}
+                onChange={(ev) => setNamaTamu(ev.target.value)}
               />
             </div>
           </div>
@@ -159,7 +162,7 @@ const Pemesanan = () => {
                 id="grid-first-name"
                 type="date"
                 placeholder="Tanggal Check In"
-                onChange={(ev) => setTglCheckIn({ data: ev.target.value })}
+                onChange={(ev) => setTglCheckIn(ev.target.value)}
               />
             </div>
             {/* Check Out*/}
@@ -173,7 +176,7 @@ const Pemesanan = () => {
                 id="grid-first-name"
                 type="date"
                 placeholder="Tanggal Check Out"
-                onChange={(ev) => setTglCheckOut({ data: ev.target.value })}
+                onChange={(ev) => setTglCheckOut(ev.target.value)}
               />
             </div>
             {/* Tipe Kamar*/}
@@ -209,15 +212,23 @@ const Pemesanan = () => {
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                 Jumlah Kamar
               </label>
-              <div className="appearance-none block w-full bg-gray-200 text-gray-700 border rounded
-                  py-1.5 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
-                <button className='bg-green-300 text-green-600 rounded px-2' onClick={() => dispatch({ type: "increment" })}>
+              <div
+                className="appearance-none block w-full bg-gray-200 text-gray-700 border rounded
+                  py-1.5 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+              >
+                <button
+                  className="bg-green-300 text-green-600 rounded px-2"
+                  onClick={() => dispatch({ type: "increment" })}
+                >
                   +
                 </button>
-                <button className='bg-red-300 text-red-600 mx-3 rounded px-2' onClick={() => dispatch({ type: "decrement" })}>
+                <button
+                  className="bg-red-300 text-red-600 mx-3 rounded px-2"
+                  onClick={() => dispatch({ type: "decrement" })}
+                >
                   -
                 </button>
-                {state.count} 
+                {state.count}
               </div>
               <p>{alert}</p>
             </div>
@@ -231,8 +242,9 @@ const Pemesanan = () => {
               </label>
               <div className="relative">
                 <button
+                  type="submit"
                   className="rounded-xl p-1.5 w-1/3 text-white  bg-green-500"
-                  onClick={handleSubmit}
+                  onClick={() => setPergi(true) && handleSubmit}
                 >
                   submit
                 </button>
