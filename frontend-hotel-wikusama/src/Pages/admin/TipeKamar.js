@@ -43,7 +43,7 @@ const TipeKamar = ({onClose }) => {
     formData.append("deskripsi", deskripsi.data);
     formData.append("foto", selectedFile, selectedFile.name);
     axios
-      .post("http://localhost:8080/store/tipe_kamar", formData)
+      .post("http://localhost:8080/hotel/tipe_kamar", formData)
       .then((res) => {
         setNamaTipeKamar("");
         setHarga("");

@@ -19,6 +19,8 @@ const kamar = models.kamar;
 const detail_pemesanan = models.detail_pemesanan;
 const tipe_kamar = models.tipe_kamar;
 
+
+
 //konfigurasi proses upload file
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -37,13 +39,50 @@ const storage = multer.diskStorage({
 let upload2 = multer({ storage: storage });
 //endpoint ditulis disini
 //endpoint get data tipe_kamar
+
+// app.get("/", (req, res) => {
+//   const imagePath = "localhost:8080/image/"
+
+//   tipe_kamar
+//     .findAll()
+//     .then((tipe_kamar) => {
+//       res.json({
+//         count: tipe_kamar.length,
+//         tipe_kamar: tipe_kamar,
+//         image: imagePath + tipe_kamar.foto
+//       });
+//     })
+//     .catch((error) => {
+//       res.json({
+//         message: error.message,
+//       });
+//     });
+// });
+
 app.get("/", (req, res) => {
+  const imagePath = "http://localhost:8080/image/"
+
   tipe_kamar
-    .findAll()
+    .findAll({
+      include: [
+        {
+          model: kamar,
+          as: "kamar",
+          attributes: ["id_kamar"],
+          required: false,
+        }
+      ]
+    })
     .then((tipe_kamar) => {
+      // Map over the tipe_kamar array and add the image URL to each object
+      const tipe_kamar_with_image_url = tipe_kamar.map((tk) => ({
+        ...tk.toJSON(),
+        image: `${imagePath}${tk.foto}`,
+      }));
+
       res.json({
-        count: tipe_kamar.length,
-        tipe_kamar: tipe_kamar,
+        count: tipe_kamar_with_image_url.length,
+        tipe_kamar: tipe_kamar_with_image_url,
       });
     })
     .catch((error) => {
@@ -52,6 +91,12 @@ app.get("/", (req, res) => {
       });
     });
 });
+
+
+// Serve static files from the "uploads" directory
+app.use(express.static('image'))
+
+
 
 app.post("/kosong", (req, res) => {
   tipe_kamar
@@ -107,6 +152,56 @@ app.post("/kosong", (req, res) => {
     });
 });
 
+app.post("/kosong/all", (req, res) => {
+  const imagePath = "http://localhost:8080/image/"
+  tipe_kamar
+    .findAll({
+      include: [
+        {
+          model: kamar,
+          as: "kamar",
+          attributes: ["id_kamar"],
+          required: false,
+          include: [
+            {
+              model: detail_pemesanan,
+              as: "detail_pemesanan",
+              attributes: ["tgl_akses"],
+              required: false,
+              where: {
+                tgl_akses: {
+                  [Op.and]: {
+                    [Op.between]: [req.body.tgl_check_in, req.body.tgl_check_out],
+                  }
+                },
+              },
+            },
+          ],
+        },
+      ],
+      where: {
+        "$kamar->detail_pemesanan.tgl_akses$": {
+          [Op.is]: null
+        },
+      },
+    })
+    .then((tipe_kamar) => {
+      const tipe_kamar_with_image_url = tipe_kamar.map((tk) => ({
+        ...tk.toJSON(),
+        image: `${imagePath}${tk.foto}`,
+      }));
+      res.json({
+        count: tipe_kamar_with_image_url.length,
+        tipe_kamar: tipe_kamar_with_image_url,
+      });
+    })
+    .catch((error) => {
+      res.json({
+        message: error.message,
+      });
+    });
+});
+
 //endpoint untuk menyimpan data tipe_kamar, METHOD POST, function create
 app.post("/", upload2.single("foto"), (req, res) => {
   let data = {
@@ -129,8 +224,17 @@ app.post("/", upload2.single("foto"), (req, res) => {
     });
 });
 
+app.get('/images/:filename', (req, res) => {
+  const filename = req.params.filename
+  const imagePath = "C:/Users/RAFI DUTA/Documents/KODING/REACT JS/hotel-wikusama/backend-hotel-wikusama/image/" + filename
+
+  res.sendFile(imagePath)
+})
+
+
+
 //endpoint untuk mengupdate data tipe_kamar, METHOD: PUT, fuction: UPDATE
-app.put("/:id", (req, res) => {
+app.put("/:id", upload2.single("foto"), (req, res) => {
   let param = {
     id_tipe_kamar: req.params.id,
   };
@@ -138,6 +242,7 @@ app.put("/:id", (req, res) => {
     nama_tipe_kamar: req.body.nama_tipe_kamar,
     harga: req.body.harga,
     deskripsi: req.body.deskripsi,
+    foto: req.file.filename
   };
   tipe_kamar
     .update(data, { where: param })

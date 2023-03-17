@@ -11,7 +11,7 @@ const ListPemesanan = () => {
 
   const getPemesanan = async () => {
     try {
-      let response = await axios.get("http://localhost:8080/store/pemesanan");
+      let response = await axios.get("http://localhost:8080/hotel/pemesanan");
       setPemesanans(response.data.pemesanan);
     } catch (e) {
       console.log(e.message);
@@ -23,7 +23,7 @@ const ListPemesanan = () => {
       console.log(email.data);
       try {
         let response = await axios.post(
-          "http://localhost:8080/store/pemesanan/email",
+          "http://localhost:8080/hotel/pemesanan/email",
           {
             email: email.data,
           }
@@ -41,7 +41,7 @@ const ListPemesanan = () => {
       console.log(tgl_check_in.data);
       try {
         let response = await axios.post(
-          "http://localhost:8080/store/pemesanan/checkin",
+          "http://localhost:8080/hotel/pemesanan/checkin",
           {
             tgl_check_in: tgl_check_in.data,
           }
@@ -59,6 +59,14 @@ const ListPemesanan = () => {
     setShowModal(true);
   };
 
+  const handleDelete = async (id_pemesanan) => {
+    try {
+      let response = await axios.get("http://localhost:8080/hotel/pemesanan/" + id_pemesanan);
+      console.log('delete successful')
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
   const options = { day: 'numeric', month: 'long', year: 'numeric',   };
   const locale = (tgl_check_in) => {
     const date = new Date(tgl_check_in)
@@ -167,6 +175,8 @@ const ListPemesanan = () => {
                 <th className="border px-4 py-2">Email</th>
                 <th className="border px-4 py-2">Status</th>
                 <th className="border px-4 py-2">Tgl Check In</th>
+                <th className="border px-4 py-2">Tgl Check Out</th>
+                <th className="border px-4 py-2">Tipe Kamar</th>
                 <th className="border px-4 py-2">Total Kamar</th>
                 <th className="border px-4 py-2">Aksi</th>
               </tr>
@@ -191,6 +201,12 @@ const ListPemesanan = () => {
                       <td className="border px-4 py-2">
                       {locale(pemesanan.tgl_check_in)}
                       </td>
+                      <td className="border px-4 py-2">
+                      {locale(pemesanan.tgl_check_out)}
+                      </td>
+                      <td className="border px-4 py-2 text-center">
+                      {pemesanan.id_tipe_kamar}                        
+                      </td>
                       <td className="border px-4 py-2 text-center">
                       {pemesanan.jumlah_kamar}                        
                       </td>
@@ -202,7 +218,8 @@ const ListPemesanan = () => {
                           Edit
                         </button>
 
-                        <button className="bg-red-300 px-5 mx-3 rounded text-red-600 hover:text-white">
+                        <button className="bg-red-300 px-5 mx-3 rounded text-red-600 hover:text-white"
+                        onClick={() => handleDelete(pemesanan.id_pemesanan)}>
                           Delete
                         </button>
                       </td>

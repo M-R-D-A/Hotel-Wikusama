@@ -1,12 +1,26 @@
 import React, { useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 
-const DatePemesanan = ({ onSearch }) => {
+const DatePemesanan = () => {
   const [checkinDate, setCheckinDate] = useState("");
   const [checkoutDate, setCheckoutDate] = useState("");
-
+  const navigate = useNavigate();
+  console.log(checkinDate);
+  console.log(checkoutDate);
   function handleSubmit(event) {
-    event.preventDefault();
-    onSearch(checkinDate, checkoutDate);
+    // event.preventDefault();
+    
+    // <NavLink
+    //   to={{
+    //     pathname: "/daftar_kamar",
+    //     state: {
+    //       tgl_check_in: checkinDate,
+    //       tgl_check_out: checkoutDate,
+    //     },
+    //   }}
+    // >
+    //   Go to Second Page
+    // </NavLink>;
   }
   var column = "flex flex-wrap -mx-3 mb-3";
 
@@ -16,6 +30,7 @@ const DatePemesanan = ({ onSearch }) => {
         <h1 className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-4">
           Pesan Kamar
         </h1>
+
         <form onSubmit={handleSubmit}>
           <div className={column}>
             <div className="w-2/5 px-1  md:mb-0">
@@ -58,13 +73,13 @@ const DatePemesanan = ({ onSearch }) => {
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                 submit
               </label>
-              <button
-                type="submit"
-                className="appearance-none block w-full bg-green-500 text-white border rounded
+                <button
+                  onClick={()=>navigate('/daftar_kamar', {replace:true, state:{checkinDate, checkoutDate}})}
+                  className="appearance-none block w-full bg-green-500 text-white border rounded
                 py-1.5 px-4  leading-tight"
-              >
-                Search
-              </button>
+                >
+                  Search
+                </button>
             </div>
           </div>
         </form>

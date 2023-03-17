@@ -26,19 +26,6 @@ function MainNavigation() {
                 Home
               </NavLink>
             </li>
-            {/* Pemesanan */}
-            <li> 
-              <NavLink
-                to="/pemesanan"
-                className={({ isActive }) =>
-                  isActive
-                    ? "font-semibold bg-gray-300 p-2 rounded-full transition-all duration-200 ease-linear"
-                    : "hover:bg-gray-100 p-2 rounded-full transition-all duration-200 ease-linear" 
-                }
-              >
-                Pemesanan
-              </NavLink>
-            </li>
             {/* Daftar Kamar */}
             <li> 
               <NavLink
@@ -50,6 +37,19 @@ function MainNavigation() {
                 }
               >
                 Daftar Kamar
+              </NavLink>
+            </li>
+            {/* Daftar Bukti */}
+            <li> 
+              <NavLink
+                to="/bukti"
+                className={({ isActive }) =>
+                  isActive
+                    ? "font-semibold bg-gray-300 p-2 rounded-full transition-all duration-200 ease-linear"
+                    : "hover:bg-gray-100 p-2 rounded-full transition-all duration-200 ease-linear" 
+                }
+              >
+                Bukti Pemesanan
               </NavLink>
             </li>
             {/* About */}
@@ -65,19 +65,6 @@ function MainNavigation() {
                 About
               </NavLink>
             </li>
-            {/* Login */}
-            <li>
-              <NavLink
-                to="/login"
-                className={({ isActive }) =>
-                  isActive
-                    ? "font-semibold bg-gray-300 p-2 rounded-full transition-all duration-200 ease-linear"
-                    : "hover:bg-gray-100 p-2 rounded-full transition-all duration-200 ease-linear"
-                }
-              >
-                Login
-              </NavLink>
-            </li>
           </ul>
         </nav>
         )}
@@ -87,7 +74,7 @@ function MainNavigation() {
           <h1 className='top-3 font-semibold items-center left-12 absolute text-xl'>Resepsionis</h1>
             <li> 
             <NavLink
-                to="/resp"
+                to="/"
                 end
                 className={({ isActive }) =>
                   isActive
@@ -111,18 +98,6 @@ function MainNavigation() {
               </NavLink>
             </li>
             <li> 
-            <NavLink
-                to="/resp/editStatus"
-                className={({ isActive }) =>
-                  isActive
-                    ? "font-semibold bg-gray-300 p-2 rounded-full transition-all duration-200 ease-linear"
-                    : "hover:bg-gray-100 p-2 rounded-full transition-all duration-200 ease-linear"
-                }
-              >
-                Edit Status
-              </NavLink>
-            </li>
-            <li> 
             <button
                 onClick={ctx.onLogout}
                 className={({ isActive }) =>
@@ -143,7 +118,7 @@ function MainNavigation() {
           <h1 className='top-3 font-semibold items-center left-12 absolute text-xl'>Admin</h1>
             <li> 
             <NavLink
-                to="/admin"
+                to="/"
                 end
                 className={({ isActive }) =>
                   isActive

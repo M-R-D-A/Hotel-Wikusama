@@ -8,7 +8,7 @@ const ListTipeKamar = () => {
 
   const getTipeKamar = async () => {
     try {
-      let response = await axios.get("http://localhost:8080/store/tipe_kamar");
+      let response = await axios.get("http://localhost:8080/hotel/tipe_kamar");
       console.log(response);
       setTipeKamar(response.data.tipe_kamar);
     } catch (e) {

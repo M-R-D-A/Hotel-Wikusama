@@ -8,7 +8,7 @@ const EditStatus = (props) => {
         e.preventDefault();
 
     axios
-      .put("http://localhost:8080/store/pemesanan/status/" + props.id_pemesanan, {
+      .put("http://localhost:8080/hotel/pemesanan/status/" + props.id_pemesanan, {
         status_pemesanan : status.data        
       })
       .then((res) => {

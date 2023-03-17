@@ -20,6 +20,7 @@ import Riwayat from './Pages/Riwayat';
 import AuthContext from './context/auth-context';
 import DaftarKamar from './Pages/kostumer/DaftarKamar';
 import EditStatus from './Pages/resepsionis/EditStatus';
+import Bukti from './Pages/kostumer/Bukti';
 
 const router = createBrowserRouter([
   {
@@ -29,17 +30,16 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       { path: '/about', element: <About />},
-      { path: '/pemesanan', element: <Pemesanan />},
       { path: '/daftar_kamar', element: <DaftarKamar />},
       { path: '/login', element: <Login />},
-      { path: '/riwayat', element: <Riwayat />}
+      { path: '/bukti', element: <Bukti />},
     ]
   }
 ])
 
 const routerResepsionis = createBrowserRouter([
   {
-    path: '/resp',
+    path: '/',
     element: <RootLayout />,
     errorElement: <ErrorPage />,
     children: [
@@ -52,7 +52,7 @@ const routerResepsionis = createBrowserRouter([
 
 const routerAdmin = createBrowserRouter([
   {
-    path: '/admin',
+    path: '/',
     element: <RootLayout />,
     errorElement: <ErrorPage />,
     children: [

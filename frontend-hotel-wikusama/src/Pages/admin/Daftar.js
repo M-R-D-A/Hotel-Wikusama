@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const Daftar = ({ onClose }) => {
+const Daftar = (props) => {
   const [selectedFile, setSelectedFile] = useState();
   const [preview, setPreview] = useState();
   const [nameUser, setNameUser] = useState("");
@@ -35,26 +35,47 @@ const Daftar = ({ onClose }) => {
   // submit form daftar ke backend menggunakan form append dan axios
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Create an object of formData
-    const formData = new FormData();
 
-    // Update the formData object
-    formData.append("name_user", nameUser.data);
-    formData.append("foto", selectedFile, selectedFile.name);
-    formData.append("email", email.data);
-    formData.append("password", password.data);
-    formData.append("role", role.data);
-    axios
-      .post("http://localhost:8080/store/user", formData)
-      .then((res) => {
-        setNameUser("");
-        setEmail("");
-        setPassword("");
-        setRole(null);
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
+    if (props.idUser) {
+      axios
+        .put("http://localhost:8080/hotel/user/" + props.idUser, {
+          name_user: nameUser.data,
+          email: email.data,
+          password: password.data,
+          role: role.data,
+        })
+        .then((res) => {
+          setNameUser("");
+          setEmail("");
+          setPassword("");
+          setRole(null);
+        })
+        .catch((err) => {
+          console.log(err.message);
+        });
+    } else if (props.idUser == null) {
+      console.log("anjay");
+      // Create an object of formData
+      const formData = new FormData();
+
+      // Update the formData object
+      formData.append("name_user", nameUser.data);
+      formData.append("foto", selectedFile, selectedFile.name);
+      formData.append("email", email.data);
+      formData.append("password", password.data);
+      formData.append("role", role.data);
+      axios
+        .post("http://localhost:8080/hotel/user", formData)
+        .then((res) => {
+          setNameUser("");
+          setEmail("");
+          setPassword("");
+          setRole(null);
+        })
+        .catch((err) => {
+          console.log(err.message);
+        });
+    }
   };
 
   var column = "flex flex-wrap -mx-3 mb-6";
@@ -159,7 +180,7 @@ const Daftar = ({ onClose }) => {
                 </button>
                 <button
                   className="rounded-xl p-4 text-white  bg-red-500"
-                  onClick={onClose}
+                  onClick={props.onClose}
                 >
                   Close
                 </button>

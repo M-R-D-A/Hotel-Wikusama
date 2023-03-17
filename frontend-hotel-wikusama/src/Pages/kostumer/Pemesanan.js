@@ -32,7 +32,7 @@ const Pemesanan = () => {
         return new Date().getTime() + Math.random();
       };
       axios
-        .post("http://localhost:8080/store/pemesanan", {
+        .post("http://localhost:8080/hotel/pemesanan", {
           nomor_pemesan: uniqueNumber(),
           nama_pemesan: namaPemesan,
           email_pemesan: emailPemesan,
@@ -59,7 +59,7 @@ const Pemesanan = () => {
       if (tglCheckIn && tglCheckOut) {
         try {
           let response = await axios.post(
-            "http://localhost:8080/store/tipe_kamar/kosong",
+            "http://localhost:8080/hotel/tipe_kamar/kosong",
             {
               id: tipeKamar,
               tgl_check_in: tglCheckIn,
@@ -233,7 +233,7 @@ const Pemesanan = () => {
               <p>{alert}</p>
             </div>
           </div>
-          {/* Tipe Kamar && Jumlah Kamar && Button Submit*/}
+          {/* Button Submit*/}
           <div className="flex flex-wrap -mx-3 mb-2 w-full">
             {/* Button Submit */}
             <div className="w-full md:w-1/3 px-3 mb-3 md:mb-0">

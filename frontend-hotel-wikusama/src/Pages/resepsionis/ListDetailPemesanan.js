@@ -5,14 +5,21 @@ const ListDetailPemesanan = () => {
     const [details, setDetails] = useState([]);
     const getDetail = async () => {
         try {
-            let response = await axios.get('http://localhost:8080/store/detail_pemesanan');
+            let response = await axios.get('http://localhost:8080/hotel/detail_pemesanan');
             setDetails(response.data.detail_pemesanan);
             console.log(response.data);
         } catch(e) {
             console.log(e.message);
         }
     }
-
+    const handleDelete = async (id_detail_pemesanan) => {
+      try {
+        let response = await axios.delete('http://localhost:8080/hotel/detail_pemesanan/'+ id_detail_pemesanan);
+        console.log('delete successful');
+    } catch(e) {
+        console.log(e.message);
+    }
+    }
     useEffect(() => {
         getDetail();
     }, [])
@@ -41,8 +48,11 @@ const ListDetailPemesanan = () => {
                         <td className='border px-4 py-2'>{detail_pemesanan.tgl_akses}</td>
                         <td className='border px-4 py-2'>{detail_pemesanan.harga}</td>
                         <td className='border px-4 py-2'>
-                          <button className='bg-yellow-300 px-5 mx-3 rounded text-yellow-600 hover:text-white'>Edit</button>
-                          <button className='bg-red-300 px-5 mx-3 rounded text-red-600 hover:text-white'>Delete</button>
+                          <button className='bg-yellow-300 px-5 mx-3 rounded text-yellow-600 hover:text-white'
+                          >Edit</button>
+                          <button 
+                          onClick={() => handleDelete(detail_pemesanan.id_detail_pemesanan)}
+                          className='bg-red-300 px-5 mx-3 rounded text-red-600 hover:text-white'>Delete</button>
                         </td>
                       </tr>
                     )

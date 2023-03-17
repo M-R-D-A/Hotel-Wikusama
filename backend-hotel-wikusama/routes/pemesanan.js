@@ -25,7 +25,11 @@ sequelize
 //endpoint get data pemesanan
 app.get("/", (req, res) => {
   pemesanan
-    .findAll()
+    .findAll({
+      order: [
+        ['tgl_check_in', 'DESC']
+      ]
+    })
     .then((pemesanan) => {
       res.json({
         count: pemesanan.length,
@@ -44,6 +48,9 @@ app.post("/email", (req, res) => {
   const email = req.body.email; // retrieve the email from the request parameters
   pemesanan
     .findAll({
+      order: [
+        ['tgl_check_in', 'DESC']
+      ],
       where: {
         email_pemesan: {
           [Op.like]: '%'+email+'%'
@@ -68,6 +75,9 @@ app.post("/checkin", (req, res) => {
   const tgl_check_in = req.body.tgl_check_in; // retrieve the email from the request parameters
   pemesanan
     .findAll({
+      order: [
+        ['tgl_check_in', 'DESC']
+      ],
       where: {
         tgl_check_in: {
           [Op.like]: tgl_check_in+'T00:00:00.000Z'
@@ -149,12 +159,14 @@ app.post("/", (req, res) => {
         ],
         // attributes: ["nama_tipe_kamar"],
         where: {
+          "$kamar.id_tipe_kamar$": req.body.id_tipe_kamar,
           "$kamar->detail_pemesanan.tgl_akses$": {
             [Op.is]: null
           },
         },
       })
         .then(async (result) => {
+            console.log(result[0]);
             const nomor = result[0].kamar
             // const numDays = getDaysBetween(req.body.tgl_check_in, req.body.tgl_check_out)
             const startDate = new Date(req.body.tgl_check_in);
@@ -186,7 +198,7 @@ app.post("/", (req, res) => {
               message: 'Booking successful',
               booking: {
                 id_pemesanan: res_pemesanan.dataValues.id_pemesanan,
-                tipe_kamar: req.body.id_tipe_kamar,
+                id_tipe_kamar: req.body.id_tipe_kamar,
                 jumlah_kamar: req.body.jumlah_kamar,
                 check_in: req.body.tgl_check_in,
                 check_out: req.body.tgl_check_out,

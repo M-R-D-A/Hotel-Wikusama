@@ -84,11 +84,13 @@ app.put("/:id", (req,res) => {
         id_user : req.params.id
     }
     let data = {
-        name : req.body.name,
-        username : req.body.username
+        name_user : req.body.name_user,
+        email: req.body.email,
+        password : req.body.password,
+        role: req.body.role
     }
     if(req.body.password){
-        data.password = md5(req.body.password)
+        data.password = req.body.password
     }
     user.update(data, {where: param})
     .then(result => {

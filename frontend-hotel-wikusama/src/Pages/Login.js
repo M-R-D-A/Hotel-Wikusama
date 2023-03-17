@@ -14,7 +14,7 @@ const Login = () => {
     console.log(nameUser.data);
     console.log(password.data); 
     axios
-      .post("http://localhost:8080/store/user/auth", {
+      .post("http://localhost:8080/hotel/user/auth", {
         name_user: nameUser.data,
         password: password.data
       })
@@ -25,9 +25,9 @@ const Login = () => {
           ctx.onLogin(data.name_user, data.password, data.role)
         }
         if(data.role === 'resepsionis'){
-          window.location.href = '/resp';
+          window.location.href = '/';
         } else {
-          window.location.href = '/admin';
+          window.location.href = '/';
         }
       })
       .catch((err) => {
